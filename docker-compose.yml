@@ -5,7 +5,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      PROFILE_NAME: "Messier333"
+      PROFILE_NAME: "portfolio-name"
       CONTENT_DIR: "/docs"
       DEFAULT_MD: "portfolio.md"
     volumes:
