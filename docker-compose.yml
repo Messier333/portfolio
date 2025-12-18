@@ -9,5 +9,5 @@ services:
       CONTENT_DIR: "/docs"
       DEFAULT_MD: "portfolio.md"
     volumes:
-      - ./app/content:/docs:ro
+      - ./content:/docs:ro
     restart: unless-stopped
