@@ -7,27 +7,33 @@ from fastapi.templating import Jinja2Templates
 import os
 import markdown
 
+BASE_DIR = Path(__file__).resolve().parent
+STATIC_DIR = BASE_DIR / "static"
+TEMPLATES_DIR = BASE_DIR / "templates"
+CONTENT_DIR = Path(os.getenv("CONTENT_DIR", str(BASE_DIR / "content"))).expanduser().resolve()
+DEFAULT_MD = os.getenv("DEFAULT_MD", "portfolio.md")
+MD_PATH = CONTENT_DIR / DEFAULT_MD
+
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
-
-MD_PATH = Path("content/portfolio.md")
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 PROFILE_NAME = os.getenv("PROFILE_NAME", "Your Name")
+
 def render_markdown(md_text: str) -> tuple[str, str]:
     md = markdown.Markdown(
         extensions=["toc", "fenced_code", "tables", "codehilite", "smarty"],
         extension_configs={
-        "toc": {
-            "toc_depth": "2-2",
-            "slugify": lambda s, sep: "-".join(
-                "".join(ch.lower() if ch.isalnum() else " " for ch in s).split()
-            ),
-        }
-    },
-    output_format="html5",
-)
+            "toc": {
+                "toc_depth": "2-2",
+                "slugify": lambda s, sep: "-".join(
+                    "".join(ch.lower() if ch.isalnum() else " " for ch in s).split()
+                ),
+            }
+        },
+        output_format="html5",
+    )
     body_html = md.convert(md_text)
     toc_html = md.toc
     return body_html, toc_html
@@ -35,6 +41,12 @@ def render_markdown(md_text: str) -> tuple[str, str]:
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
+    if not MD_PATH.exists():
+        return HTMLResponse(
+            content=f"<h1>Markdown not found</h1><p>{MD_PATH}</p>",
+            status_code=404,
+        )
+
     md_text = MD_PATH.read_text(encoding="utf-8")
     body_html, toc_html = render_markdown(md_text)
     return templates.TemplateResponse(

@@ -1,0 +1,13 @@
+services:
+  portfolio:
+    build: .
+    container_name: portfolio
+    ports:
+      - "8000:8000"
+    environment:
+      PROFILE_NAME: "Messier333"
+      CONTENT_DIR: "/docs"
+      DEFAULT_MD: "portfolio.md"
+    volumes:
+      - ./app/content:/docs:ro
+    restart: unless-stopped
