@@ -1,13 +1,13 @@
-Run Locally (Python)
+## Run Locally (Python)
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
+---
 
-<br>
-Run with Docker
+##Run with Docker
 
 build image
 ```bash
