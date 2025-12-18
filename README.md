@@ -17,6 +17,7 @@ run container
 ```bash
 docker run --rm -p 8000:8000 \
   -e PROFILE_NAME="user" \
+  -e CONTENT_DIR="/docs" \
   -v ./content:/docs:ro \
   portfolio
 ```
