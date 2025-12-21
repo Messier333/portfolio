@@ -20,3 +20,11 @@ docker run --rm -p 8000:8000 \
   -v ./content:/docs:ro \
   portfolio
 ```
+
+## Credits
+
+This project uses the **Start Bootstrap - Resume** template.
+
+- Template: https://github.com/StartBootstrap/startbootstrap-resume
+- License: MIT License
+- Copyright (c) Start Bootstrap
