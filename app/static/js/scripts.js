@@ -7,28 +7,72 @@
 // Scripts
 // 
 
-window.addEventListener('DOMContentLoaded', event => {
 
-    // Activate Bootstrap scrollspy on the main nav element
-    const sideNav = document.body.querySelector('#sideNav');
-    if (sideNav) {
-        new bootstrap.ScrollSpy(document.body, {
-            target: '#sideNav',
-            rootMargin: '0px 0px -40%',
-        });
-    };
+window.addEventListener("DOMContentLoaded", () => {
+  const navRoot = document.querySelector("#sideNav");
+  const navbarToggler = document.querySelector(".navbar-toggler");
 
-    // Collapse responsive navbar when toggler is visible
-    const navbarToggler = document.body.querySelector('.navbar-toggler');
-    const responsiveNavItems = [].slice.call(
-        document.querySelectorAll('#navbarResponsive .nav-link')
-    );
-    responsiveNavItems.map(function (responsiveNavItem) {
-        responsiveNavItem.addEventListener('click', () => {
-            if (window.getComputedStyle(navbarToggler).display !== 'none') {
-                navbarToggler.click();
-            }
-        });
+  const tocRoot = document.querySelector("#navbarResponsive .toc");
+  if (tocRoot) {
+    tocRoot.querySelectorAll("ul").forEach((ul) => ul.classList.add("navbar-nav"));
+    tocRoot.querySelectorAll("li").forEach((li) => li.classList.add("nav-item"));
+    tocRoot.querySelectorAll("a").forEach((a) => a.classList.add("nav-link", "js-scroll-trigger"));
+    tocRoot.classList.add("w-100");
+  }
+
+  const links = Array.from(document.querySelectorAll("#navbarResponsive a.nav-link"))
+    .filter((a) => a.getAttribute("href") && a.getAttribute("href").startsWith("#"));
+
+  const targets = links
+    .map((a) => {
+      const id = decodeURIComponent(a.getAttribute("href").slice(1));
+      const el = document.getElementById(id);
+      return el ? { a, el, id } : null;
+    })
+    .filter(Boolean);
+
+  if (!targets.length) return;
+
+  function setActive(activeId) {
+    links.forEach((a) => a.classList.remove("active"));
+    const item = targets.find((t) => t.id === activeId);
+    if (item) item.a.classList.add("active");
+  }
+
+  const OFFSET = 120;
+
+  let ticking = false;
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+
+    window.requestAnimationFrame(() => {
+      const y = window.scrollY + OFFSET;
+
+      let current = targets[0].id;
+
+      for (const t of targets) {
+        const top = t.el.getBoundingClientRect().top + window.scrollY;
+        if (top <= y) current = t.id;
+        else break;
+      }
+
+      setActive(current);
+      ticking = false;
     });
+  }
 
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+
+  onScroll();
+
+  links.forEach((a) => {
+    a.addEventListener("click", () => {
+      if (navbarToggler && window.getComputedStyle(navbarToggler).display !== "none") {
+        navbarToggler.click();
+      }
+    });
+  });
 });

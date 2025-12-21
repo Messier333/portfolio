@@ -53,19 +53,5 @@
 
   <script src="/static/js/scripts.js"></script>
 
-  <script>
-    (function () {
-      const tocRoot = document.querySelector('#navbarResponsive .toc');
-      if (!tocRoot) return;
-
-      tocRoot.querySelectorAll('ul').forEach(ul => ul.classList.add('navbar-nav'));
-      tocRoot.querySelectorAll('li').forEach(li => li.classList.add('nav-item'));
-      tocRoot.querySelectorAll('a').forEach(a => {
-        a.classList.add('nav-link', 'js-scroll-trigger');
-      });
-
-      tocRoot.classList.add('w-100');
-    })();
-  </script>
 </body>
 </html>
