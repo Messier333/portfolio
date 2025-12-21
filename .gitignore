@@ -26,4 +26,3 @@ docker-compose.override.yml
 .coverage
 htmlcov/
 local/
-content/
