@@ -1,5 +1,11 @@
 FROM python:3.12-slim
 
+ARG UID=568
+ARG GID=3002
+
+RUN groupadd -g ${GID} appgroup \
+ && useradd -u ${UID} -g ${GID} -m appuser
+
 WORKDIR /app
 ENV CONTENT_DIR=/docs
 RUN apt-get update && apt-get install -y --no-install-recommends \
