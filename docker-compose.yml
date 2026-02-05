@@ -3,7 +3,7 @@ services:
     build: .
     container_name: portfolio
     ports:
-      - "8000:8000"
+      - "8050:8000"
     environment:
       PROFILE_NAME: "portfolio-name"
       CONTENT_DIR: "/docs"
