@@ -9,5 +9,5 @@ services:
       CONTENT_DIR: "/docs"
       DEFAULT_MD: "portfolio.md"
     volumes:
-      - /mnt/NVME1/Docker/portfolio:/docs:ro
+      - {docs}:/docs:ro
     restart: unless-stopped
